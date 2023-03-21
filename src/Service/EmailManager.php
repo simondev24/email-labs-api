@@ -9,9 +9,9 @@ use Symfony\Component\HttpFoundation\Response;
 
 class EmailManager
 {
-    private const API_KEY = 'ee0f901ac460dc8c333df85e3983182567db0e7a';
+    private const API_KEY = '';
 
-    private const API_SECRET = 'c4fb852e418af0960bbafac19bcd16d5a4b1e66d';
+    private const API_SECRET = '';
 
     private const URL = 'https://api.emaillabs.net.pl/api/';
 

@@ -2,9 +2,9 @@
 
 namespace App\Service;
 
-use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\Exception;
 use Doctrine\DBAL\ParameterType;
+use Doctrine\DBAL\Result;
 use Doctrine\ORM\EntityManagerInterface;
 
 class DbManager
@@ -31,12 +31,19 @@ class DbManager
     /**
      * @throws Exception
      */
-    public function executeQuery(string $sqlQuery, array $queryParameters) {
+    public function executeQuery(string $sqlQuery, array $queryParameters): Result {
         $statement = $this->entityManager->getConnection()->prepare($sqlQuery);
         foreach ($queryParameters as $parameter => $value) {
             $statement->bindValue($parameter, $value, self::PARAMETER_TYPES[gettype($value)]);
         }
         return $statement->executeQuery();
+    }
+
+    public function executeWhereInQuery(string $sql, array $queryParameters, array $parameterType): Result {
+        return $this->entityManager->getConnection()->executeQuery($sql,
+            $queryParameters,
+            $parameterType
+        );
     }
 
 }

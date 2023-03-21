@@ -12,6 +12,7 @@ use Symfony\Component\HttpFoundation\Response;
 
 class ContactManager
 {
+    private const MESSAGE_ID = 123456;
     public function __construct(
         private readonly EntityManagerInterface $entityManager,
         private readonly ContactValidator $validator,
@@ -69,14 +70,13 @@ class ContactManager
      * @throws Exception
      */
     public function getEmailsByContactIds(array $contactIds): array {
-        $messageId = 20032023;
-
-        $queryResult = $this->entityManager->getConnection()->executeQuery('SELECT email FROM contacts WHERE id IN (?)',
+        $queryResult = $this->dbManager->executeWhereInQuery(
+            'SELECT email FROM contacts WHERE id IN (?)',
             [$contactIds['contactIds']],
             [ArrayParameterType::INTEGER]
         );
         $resultEmails = array_merge(...$queryResult->fetchAllAssociative());
-        return array_fill_keys($resultEmails, ['message_id' => $messageId]);
+        return array_fill_keys($resultEmails, ['message_id' => self::MESSAGE_ID]);
     }
 
     /**
